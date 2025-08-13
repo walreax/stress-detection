@@ -8,7 +8,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.utils import to_categorical
 
-DATASET_PATH = 'WESAD'
+
+DATASET_PATH = '/Users/sakshamdua/Desktop/stress-detection/WESAD'
 subjects = [d for d in os.listdir(DATASET_PATH) if d.startswith('S') and os.path.isdir(os.path.join(DATASET_PATH, d))]
 
 X, y = [], []
@@ -28,7 +29,7 @@ for subject in sorted(subjects):
     try:
         eda = wrist['EDA']
         temp = wrist['TEMP']
-        hr = wrist['HR']
+        # hr = wrist['HR']  <- MODIFIED: Removed this line
     except KeyError:
         print(f'Skipping {subject}: missing EDA, TEMP, or HR')
         continue
@@ -40,10 +41,10 @@ for subject in sorted(subjects):
         if label not in [1, 2, 3]:
             continue
         y.append(1 if label == 3 else 0)
+        # MODIFIED: Removed the two lines for 'hr' from the list below
         features = [
             np.mean(eda[i:i+window_size]), np.std(eda[i:i+window_size]),
             np.mean(temp[i:i+window_size]), np.std(temp[i:i+window_size]),
-            np.mean(hr[i:i+window_size]), np.std(hr[i:i+window_size])
         ]
         X.append(features)
 
